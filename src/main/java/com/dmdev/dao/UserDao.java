@@ -23,32 +23,31 @@ public class UserDao implements Dao<Integer, User> {
 
     private static final UserDao INSTANCE = new UserDao();
 
-    private static final String GET_ALL_SQL = """
-            SELECT
-                id,
-                name,
-                birthday,
-                email,
-                password,
-                role,
-                gender
-            FROM users
-            """;
-    private static final String GET_BY_ID_SQL = GET_ALL_SQL + " WHERE id = ?";
-    private static final String GET_BY_EMAIL_AND_PASSWORD_SQL = GET_ALL_SQL + " WHERE email = ? AND password = ?";
+    private static final String GET_ALL_SQL = "" +
+            "   SELECT " +
+            "       id , " +
+            "       name, " +
+            "       birthday, " +
+            "       email, " +
+            "       password, " +
+            "       role, " +
+            "       gender " +
+            "   FROM users" ;
+    private static final String GET_BY_ID_SQL = GET_ALL_SQL + " WHERE id = ?" ;
+    private static final String GET_BY_EMAIL_AND_PASSWORD_SQL = GET_ALL_SQL + " WHERE email = ? AND password = ?" ;
     private static final String SAVE_SQL =
-            "INSERT INTO users (name, birthday, email, password, role, gender) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String DELETE_BY_ID_SQL = "DELETE FROM users WHERE id = ?";
-    private static final String UPDATE_BY_ID_SQL = """
-            UPDATE users
-            SET name = ?,
-                birthday = ?,
-                email = ?,
-                password = ?,
-                role = ?,
-                gender = ?
-            WHERE id = ?
-            """;
+            "INSERT INTO users (name, birthday, email, password, role, gender) VALUES (?, ?, ?, ?, ?, ?)" ;
+    private static final String DELETE_BY_ID_SQL = "DELETE FROM users WHERE id = ?" ;
+    private static final String DELETE_ALL = "DELETE FROM users" ;
+    private static final String UPDATE_BY_ID_SQL = "" +
+            "   UPDATE users" +
+            "       SET name = ?," +
+            "       birthday = ?," +
+            "       email = ?," +
+            "       password = ?," +
+            "       role = ?," +
+            "       gender = ?" +
+            "   WHERE id = ?" ;
 
     public static UserDao getInstance() {
         return INSTANCE;
@@ -122,6 +121,16 @@ public class UserDao implements Dao<Integer, User> {
             preparedStatement.setObject(1, id);
 
             return preparedStatement.executeUpdate() > 0;
+        }
+    }
+
+    @Override
+    @SneakyThrows
+    public int deleteAll() {
+        try (var connection = ConnectionManager.get();
+             var preparedStatement = connection.prepareStatement(DELETE_ALL)) {
+
+            return preparedStatement.executeUpdate();
         }
     }
 

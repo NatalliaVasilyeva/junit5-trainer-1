@@ -1,0 +1,4 @@
+birthday,gender,role,errorCode
+"11-01-11","MALE","USER","invalid.birthday"
+"1986-01-11","dummy","ADMIN","invalid.gender"
+"1989-06-23","MALE","dummy","invalid.role"
